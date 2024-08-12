@@ -27,7 +27,6 @@ function App() {
       }, 10);
       return () => clearInterval(IntervalId)
     }
-   
   })
   const handleStart = () => {
     setStarted(true);
@@ -62,7 +61,6 @@ function App() {
   
   //Data Storage
   const [attempts, setAttempts] = useState([]);
-  const [ansCount, setAnsCount] = useState(0);
   useEffect(() => {
     try{
       const SavedData = localStorage.getItem('stats');
@@ -89,13 +87,17 @@ function App() {
       result = 'false';
     }
     const newAttempt = {
-      ansCount: ansCount + 1,
+
       time: (time / 100).toFixed(2),
       feedback: result
     };
     SavedData.push(newAttempt);
     localStorage.setItem('stats', JSON.stringify(SavedData));
     setAttempts(SavedData);
+  }
+  const deleteData = () => {
+    localStorage.setItem('stats', '[]');
+    window.location.reload();
   }
   return (
     <div>
@@ -126,6 +128,7 @@ function App() {
         {started && hidden && <button onClick={handleSubmit}> Submit </button>}
         <h1>{(time / 100).toFixed(2)}</h1>
         <h1>{feedback}</h1>
+        <button onClick={deleteData}>Delete Data</button>
       </div>
     </div>
   );
