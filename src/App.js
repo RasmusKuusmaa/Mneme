@@ -9,7 +9,7 @@ function App() {
   const [feedback, setFeedback] = useState();
 
   const generateQuestion = () => {
-    setQuestion(Math.floor(Math.random() * 10 ** questionLength) + 10 ** questionLength )
+    setQuestion(Math.floor(Math.random() * 10 ** (questionLength)) + 10 ** (questionLength - 1) )
   }
   
 
@@ -112,6 +112,11 @@ function App() {
         </ul>
       </div>
       <div className='QuestionBar'>
+        <input 
+        type='number'
+        value={questionLength}
+        onChange={(e) => setQuestionLength(e.target.value)}
+        />
         <h1>{!hidden && question}</h1>
       </div>
       <div className='AnswerBox'>
