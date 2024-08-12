@@ -1,38 +1,40 @@
-.App {
-  text-align: center;
+.Settings { 
+  border: 5px solid black;
+  position: fixed;
+  width: 20vw;
+  height: 20vh;
+  left: 0;
+  top: 0;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Stats {
+  border: 5px solid black;
+  position: fixed;
+  width: 20vw;
+  height: 80vh;
+  left: 0;
+  top: 22vh;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.QuestionBar {
+  border: 5px solid black;
+  position: fixed;
+  width: 70vw;
+  height: 20vh;
+  left: 25vw;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.AnswerBox {
+  border: 5px solid black;
+  position: fixed;
+  width: 70vw;
+  height: 20vh;
+  left: 25vw;
+  top: 22vh;
 }
+.Buttons{
+  border: 5px solid black;
+  position: fixed;
+  width: 70vw;
+  height: 52vh;
+  left: 25vw;
+  top: 46vh;
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
