@@ -1,4 +1,18 @@
+/* colors
+Background: #25283dff;
+--plum: #8f3985ff;
+--african-violet: #a675a1ff;
+--rosy-brown: #cea2acff;
+Text Color: #efd9ceff;
+*/
+.Container {
+  background-color: #25283D;
+  width: 100vw;
+  height: 100vh;
+}
+
 .Settings { 
+  
   border: 5px solid black;
   position: fixed;
   width: 20vw;
@@ -14,11 +28,11 @@
   left: 0;
   top: 22vh;
 }
-.QuestionBar {
+.QuestionBox {
   border: 5px solid black;
   position: fixed;
-  width: 70vw;
-  height: 20vh;
+  width: 700vw;
+  height: 40vh;
   left: 25vw;
 }
 .AnswerBox {
@@ -37,4 +51,15 @@
   left: 25vw;
   top: 46vh;
 
+}
+h1 {
+  color: #EFD9CE;
+}
+li {
+  color: #EFD9CE;
+}
+
+.Question {
+  word-wrap: break-word; /* Ensures long words break and wrap to the next line */
+  overflow-wrap: break-word; /* Ensures long words break and wrap to the next line */
 }

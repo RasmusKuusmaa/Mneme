@@ -2,32 +2,33 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-
-  
-  const [question, setQuestion] = useState();
+  const [question, setQuestion] = useState('');
   const [questionLength, setQuestionLength] = useState(2);
-  const [feedback, setFeedback] = useState();
+  const [feedback, setFeedback] = useState('');
 
   const generateQuestion = () => {
-    setQuestion(Math.floor(Math.random() * 10 ** (questionLength)) + 10 ** (questionLength - 1) )
+    let newQuestion = "";
+    for (let i = 0; i < questionLength; i++) {
+      const digit = Math.floor(Math.random() * 10);
+      newQuestion += digit.toString();
+    }
+    setQuestion(newQuestion);
   }
-  
 
-  //timer
+  // Timer
   const [started, setStarted] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0);
-  
+
   useEffect(() => {
     if (isRunning) {
-
-      let IntervalId;
-      IntervalId = setInterval(() => {
-        setTime(prevTime => prevTime + 1)
+      const intervalId = setInterval(() => {
+        setTime(prevTime => prevTime + 1);
       }, 10);
-      return () => clearInterval(IntervalId)
+      return () => clearInterval(intervalId);
     }
-  })
+  }, [isRunning]);
+
   const handleStart = () => {
     setStarted(true);
     setIsRunning(true);
@@ -35,72 +36,68 @@ function App() {
     setTime(0);
     setAnswer('');
   }
-  
+
   const [hidden, setHidden] = useState(false);
 
   const handleHide = () => {
     setHidden(true);
   }
-  //submitting
+
+  // Submitting
   const [answer, setAnswer] = useState('');
   const handleSubmit = () => {
     setIsRunning(false);
-    setHidden(false)
+    setHidden(false);
     setStarted(false);
 
-    if (question === parseInt(answer)) {
+    if (question === answer) {
       setFeedback('true');
-   
-
-    }
-    else {
-      setFeedback('false')
+    } else {
+      setFeedback('false');
     }
     saveData();
   }
-  
-  //Data Storage
+
+  // Data Storage
   const [attempts, setAttempts] = useState([]);
   useEffect(() => {
-    try{
-      const SavedData = localStorage.getItem('stats');
-      if (SavedData) {
-        setAttempts(JSON.parse(SavedData));
+    try {
+      const savedData = localStorage.getItem('stats');
+      if (savedData) {
+        setAttempts(JSON.parse(savedData));
       } else {
         setAttempts([]);
       }
-      
     } catch {
       setAttempts([]);
     }
   }, []);
 
   const saveData = () => {
-    const SavedData = JSON.parse(localStorage.getItem('stats') || []);
-    // I am defining feedback again since  due
-    //to js's asynchronous charactaristics Feedback is 1 attempt behind
+    const savedData = JSON.parse(localStorage.getItem('stats') || '[]');
+    // Define feedback again due to JS's asynchronous characteristics
     let result;
-    if (parseInt(answer) === question) {
+    if (answer === question) {
       result = 'true';
-    }
-    else {
+    } else {
       result = 'false';
     }
     const newAttempt = {
-
       time: (time / 100).toFixed(2),
       feedback: result
     };
-    SavedData.push(newAttempt);
-    localStorage.setItem('stats', JSON.stringify(SavedData));
-    setAttempts(SavedData);
+    savedData.push(newAttempt);
+    localStorage.setItem('stats', JSON.stringify(savedData));
+    setAttempts(savedData);
   }
+
   const deleteData = () => {
     localStorage.setItem('stats', '[]');
     window.location.reload();
   }
+
   return (
-    <div>
+    <div className='Container'>
       <div className='Settings'></div>
       <div className='Stats'>
         <ul>
@@ -111,27 +108,30 @@ function App() {
           ))}
         </ul>
       </div>
-      <div className='QuestionBar'>
+      <div className='QuestionBox'>
+        <h1> Question Length:</h1>
         <input 
-        type='number'
-        value={questionLength}
-        onChange={(e) => setQuestionLength(e.target.value)}
+          type='number'
+          value={questionLength}
+          onChange={(e) => setQuestionLength(e.target.value)}
         />
-        <h1>{!hidden && question}</h1>
+        <h1 className='Question'>{!hidden && question}</h1>
       </div>
+      {/*
+       
       <div className='AnswerBox'>
         <input 
-          type='Number'
+          type='number'
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
-          
         />
       </div>
+        */}
       <div className='Buttons'>
         {!started && <button onClick={handleStart}>Start</button>}
-        {started && !hidden && <button onClick={handleHide}> Ready to answer</button>}
-        {started && hidden && <button onClick={handleSubmit}> Submit </button>}
-        <h1>{(time / 100).toFixed(2)}</h1>
+        {started && !hidden && <button onClick={handleHide}>Ready to answer</button>}
+        {started && hidden && <button onClick={handleSubmit}>Submit</button>}
+        <h1 className='Time'>{(time / 100).toFixed(2)}</h1>
         <h1>{feedback}</h1>
         <button onClick={deleteData}>Delete Data</button>
       </div>
