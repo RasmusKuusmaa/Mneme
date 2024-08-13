@@ -31,15 +31,18 @@ Text Color: #efd9ceff;
 .QuestionBox {
   border: 5px solid black;
   position: fixed;
-  width: 700vw;
-  height: 40vh;
+  width: 70vw;
+  height: 40vh; 
   left: 25vw;
+  top: 0; 
+  overflow-y: auto; 
 }
+
 .AnswerBox {
   border: 5px solid black;
   position: fixed;
-  width: 70vw;
-  height: 20vh;
+  width: 70;
+  height: auto;
   left: 25vw;
   top: 22vh;
 }
@@ -60,6 +63,6 @@ li {
 }
 
 .Question {
-  word-wrap: break-word; /* Ensures long words break and wrap to the next line */
-  overflow-wrap: break-word; /* Ensures long words break and wrap to the next line */
+  word-wrap: break-word; 
+  overflow-wrap: break-word;
 }
