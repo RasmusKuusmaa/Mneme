@@ -35,17 +35,9 @@ Text Color: #efd9ceff;
   height: 40vh; 
   left: 25vw;
   top: 0; 
-  overflow-y: auto; 
+  overflow-y: hidden; 
 }
 
-.AnswerBox {
-  border: 5px solid black;
-  position: fixed;
-  width: 70;
-  height: auto;
-  left: 25vw;
-  top: 22vh;
-}
 .Buttons{
   border: 5px solid black;
   position: fixed;
@@ -61,8 +53,32 @@ h1 {
 li {
   color: #EFD9CE;
 }
-
 .Question {
   word-wrap: break-word; 
   overflow-wrap: break-word;
+  background-color: #a675a1ff;
+  border: solid black 3px;
+  border-radius: 10%;
+  margin: 20px;
+  padding: 10px;
+  width: 60vw;
+  min-height: 25vh;
+  overflow-y: auto; 
+  font-size: 2em;      
+  font-weight: bold;  
+  font-family: Arial, sans-serif; 
+  color: #333;         
+  box-sizing: border-box; 
+}
+
+
+.Question[type='text'] {
+  border: solid black 3px; 
+  background-color: #a675a1ff; 
+  border-radius: 10%;     
+  outline: none;           
+  box-sizing: border-box;  
+  -webkit-appearance: none;
+  -moz-appearance: none;    
+  appearance: none;         
 }

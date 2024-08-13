@@ -9,6 +9,9 @@ function App() {
   const generateQuestion = () => {
     let newQuestion = "";
     for (let i = 0; i < questionLength; i++) {
+      if (i % 3 === 0) {
+        newQuestion += ' '
+      }
       const digit = Math.floor(Math.random() * 10);
       newQuestion += digit.toString();
     }
@@ -108,25 +111,31 @@ function App() {
           ))}
         </ul>
       </div>
+      
       <div className='QuestionBox'>
-        <h1> Question Length:</h1>
-        <input 
-          type='number'
-          value={questionLength}
-          onChange={(e) => setQuestionLength(e.target.value)}
-        />
-        <h1 className='Question'>{!hidden && question}</h1>
+        <div>
+          <h1> Question Length:</h1>
+          <input 
+            type='number'
+            value={questionLength}
+            onChange={(e) => setQuestionLength(e.target.value)}
+          />
+        </div>
+        {!hidden && 
+        <textarea className='Question'
+        value={question}
+
+      />
+        }
+                  
+        {hidden && 
+          <textarea className='Question'
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          />
+}
       </div>
-      {/*
-       
-      <div className='AnswerBox'>
-        <input 
-          type='number'
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-        />
-      </div>
-        */}
+
       <div className='Buttons'>
         {!started && <button onClick={handleStart}>Start</button>}
         {started && !hidden && <button onClick={handleHide}>Ready to answer</button>}
