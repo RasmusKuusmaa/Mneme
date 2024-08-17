@@ -101,7 +101,16 @@ function App() {
 
   return (
     <div className='Container'>
-      <div className='Settings'></div>
+      <div className='Settings'> 
+      <div>
+          <h1> Question Length:</h1>
+          <input 
+            type='number'
+            value={questionLength}
+            onChange={(e) => setQuestionLength(e.target.value)}
+          />
+        </div>
+      </div>
       <div className='Stats'>
         <ul>
           {attempts.map((attempt, index) => (
@@ -113,27 +122,44 @@ function App() {
       </div>
       
       <div className='QuestionBox'>
-        <div>
-          <h1> Question Length:</h1>
-          <input 
-            type='number'
-            value={questionLength}
-            onChange={(e) => setQuestionLength(e.target.value)}
-          />
-        </div>
-        {!hidden && 
+        
+        {!hidden && started && <div> 
+        <h1>Question :</h1>
         <textarea className='Question'
         value={question}
-
-      />
+        
+        />
+        </div>
         }
                   
-        {hidden && 
+        {hidden &&
+          <div> 
+          <h1>Answer : </h1>
           <textarea className='Question'
+          
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
           />
-}
+          </div>
+        }
+        {!started &&
+          <div className='feedbackContainer'>
+            <div className='feedback'>
+              <h1>Question : </h1>
+              <textarea className='Question' style={{width: '100%'}}
+                value={question}
+               />
+            </div>
+    
+            <div className='feedback'>
+              <h1>Answer : </h1>
+              <textarea className='Question' style={{width: '100%'}}
+                value={answer}
+               />
+       
+            </div>
+          </div>
+        }
       </div>
 
       <div className='Buttons'>
