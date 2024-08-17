@@ -52,14 +52,16 @@ function App() {
     setIsRunning(false);
     setHidden(false);
     setStarted(false);
-
-    if (question === answer) {
+  
+    const cleanedQuestion = question.replace(/\s+/g, '');
+    if (cleanedQuestion === answer) {
       setFeedback('true');
     } else {
       setFeedback('false');
     }
-    saveData();
+    saveData(cleanedQuestion); 
   }
+  
 
   // Data Storage
   const [attempts, setAttempts] = useState([]);
@@ -76,15 +78,11 @@ function App() {
     }
   }, []);
 
-  const saveData = () => {
+  const saveData = (cleanedQuestion) => {
     const savedData = JSON.parse(localStorage.getItem('stats') || '[]');
-    // Define feedback again due to JS's asynchronous characteristics
-    let result;
-    if (answer === question) {
-      result = 'true';
-    } else {
-      result = 'false';
-    }
+    
+    const result = cleanedQuestion === answer ? 'true' : 'false';
+  
     const newAttempt = {
       time: (time / 100).toFixed(2),
       feedback: result
