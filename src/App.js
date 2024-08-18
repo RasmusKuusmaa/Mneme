@@ -56,12 +56,13 @@ function App() {
     setStarted(false);
   
     const cleanedQuestion = question.replace(/\s+/g, '');
-    if (cleanedQuestion === answer) {
+    const cleanedAnswer = answer.replace(/\s+/g, '');
+    if (cleanedQuestion === cleanedAnswer) {
       setFeedback('true');
     } else {
       setFeedback('false');
     }
-    saveData(cleanedQuestion); 
+    saveData(cleanedQuestion, cleanedAnswer); 
   };
 
   // Data Storage
@@ -79,10 +80,10 @@ function App() {
     }
   }, []);
 
-  const saveData = (cleanedQuestion) => {
+  const saveData = (cleanedQuestion, cleanedAnswer) => {
     const savedData = JSON.parse(localStorage.getItem('stats') || '[]');
     
-    const result = cleanedQuestion === answer ? 'true' : 'false';
+    const result = cleanedQuestion === cleanedAnswer ? 'true' : 'false';
   
     const newAttempt = {
       time: (time / 100).toFixed(2),
