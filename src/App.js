@@ -1,18 +1,17 @@
-import { useEffect, useState, useRef } from 'react';
-import './App.css';
-import Typed from 'typed.js';
-
+import { useEffect, useState, useRef } from "react";
+import "./App.css";
+import Typed from "typed.js";
 
 function App() {
-  const [question, setQuestion] = useState('');
+  const [question, setQuestion] = useState("");
   const [questionLength, setQuestionLength] = useState(200);
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
 
   const generateQuestion = () => {
-    let newQuestion = '';
+    let newQuestion = "";
     for (let i = 0; i < questionLength; i++) {
       if (i % 3 === 0) {
-        newQuestion += ' ';
+        newQuestion += " ";
       }
       const digit = Math.floor(Math.random() * 10);
       newQuestion += digit.toString();
@@ -28,7 +27,7 @@ function App() {
   useEffect(() => {
     if (isRunning) {
       const intervalId = setInterval(() => {
-        setTime(prevTime => prevTime + 1);
+        setTime((prevTime) => prevTime + 1);
       }, 10);
       return () => clearInterval(intervalId);
     }
@@ -39,7 +38,7 @@ function App() {
     setIsRunning(true);
     generateQuestion();
     setTime(0);
-    setAnswer('');
+    setAnswer("");
   };
 
   const [hidden, setHidden] = useState(false);
@@ -49,27 +48,27 @@ function App() {
   };
 
   // Submitting
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState("");
   const handleSubmit = () => {
     setIsRunning(false);
     setHidden(false);
     setStarted(false);
-  
-    const cleanedQuestion = question.replace(/\s+/g, '');
-    const cleanedAnswer = answer.replace(/\s+/g, '');
+
+    const cleanedQuestion = question.replace(/\s+/g, "");
+    const cleanedAnswer = answer.replace(/\s+/g, "");
     if (cleanedQuestion === cleanedAnswer) {
-      setFeedback('true');
+      setFeedback("true");
     } else {
-      setFeedback('false');
+      setFeedback("false");
     }
-    saveData(cleanedQuestion, cleanedAnswer); 
+    saveData(cleanedQuestion, cleanedAnswer);
   };
 
   // Data Storage
   const [attempts, setAttempts] = useState([]);
   useEffect(() => {
     try {
-      const savedData = localStorage.getItem('stats');
+      const savedData = localStorage.getItem("stats");
       if (savedData) {
         setAttempts(JSON.parse(savedData));
       } else {
@@ -81,21 +80,21 @@ function App() {
   }, []);
 
   const saveData = (cleanedQuestion, cleanedAnswer) => {
-    const savedData = JSON.parse(localStorage.getItem('stats') || '[]');
-    
-    const result = cleanedQuestion === cleanedAnswer ? 'true' : 'false';
-  
+    const savedData = JSON.parse(localStorage.getItem("stats") || "[]");
+
+    const result = cleanedQuestion === cleanedAnswer ? "true" : "false";
+
     const newAttempt = {
       time: (time / 100).toFixed(2),
-      feedback: result
+      feedback: result,
     };
     savedData.push(newAttempt);
-    localStorage.setItem('stats', JSON.stringify(savedData));
+    localStorage.setItem("stats", JSON.stringify(savedData));
     setAttempts(savedData);
   };
 
   const deleteData = () => {
-    localStorage.setItem('stats', '[]');
+    localStorage.setItem("stats", "[]");
     window.location.reload();
   };
 
@@ -106,14 +105,14 @@ function App() {
     if (textareaRef.current && started && !hidden) {
       const options = {
         strings: [question],
-        typeSpeed: 10, 
+        typeSpeed: 10,
         loop: false,
         showCursor: false,
         onComplete: () => {
           if (typedInstance) {
             typedInstance.destroy();
           }
-        }
+        },
       };
 
       const instance = new Typed(textareaRef.current, options);
@@ -125,19 +124,36 @@ function App() {
     }
   }, [started, hidden, question]);
 
+
+  // answer formating
+  const formatInput = (value) => {
+ 
+    const cleaned = value.replace(/\D/g, '');
+    
+
+    const formatted = cleaned.replace(/(.{3})(?=.)/g, '$1 ');
+
+    return formatted;
+  };
+
+  const handleChange = (e) => {
+    setAnswer(formatInput(e.target.value));
+  };
+
+  
   return (
-    <div className='Container'>
-      <div className='Settings'> 
+    <div className="Container">
+      <div className="Settings">
         <div>
           <h1>Question Length</h1>
-          <input 
-            type='number'
+          <input
+            type="number"
             value={questionLength}
             onChange={(e) => setQuestionLength(e.target.value)}
           />
         </div>
       </div>
-      <div className='Stats'>
+      <div className="Stats">
         <ul>
           {attempts.map((attempt, index) => (
             <li key={index}>
@@ -146,49 +162,55 @@ function App() {
           ))}
         </ul>
       </div>
-      
-      <div className='QuestionBox'>
+
+      <div className="QuestionBox">
         {!hidden && started && (
-          <div> 
-            
+          <div>
             <h1>Question: </h1>
-            <textarea className='Question'
-                        ref={textareaRef} 
-readOnly/>
-            
+            <textarea className="Question" ref={textareaRef} readOnly />
           </div>
         )}
-                  
+
         {hidden && (
-          <div> 
+          <div>
             <h1>Answer :</h1>
             <textarea
-              className='Question'
+              className="Question"
               value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+              onChange={handleChange}
             />
           </div>
         )}
         {!started && (
-          <div className='feedbackContainer'>
-            <div className='feedback'>
+          <div className="feedbackContainer">
+            <div className="feedback">
               <h1>Question</h1>
-              <textarea className='Question' style={{width: '100%'}} value={question} />
+              <textarea
+                className="Question"
+                style={{ width: "100%" }}
+                value={question}
+              />
             </div>
-    
-            <div className='feedback'>
+
+            <div className="feedback">
               <h1>Answer: </h1>
-              <textarea className='Question' style={{width: '100%'}} value={answer} />
+              <textarea
+                className="Question"
+                style={{ width: "100%" }}
+                value={answer}
+              />
             </div>
           </div>
         )}
       </div>
 
-      <div className='Buttons'>
+      <div className="Buttons">
         {!started && <button onClick={handleStart}>Start</button>}
-        {started && !hidden && <button onClick={handleHide}>Ready to answer</button>}
+        {started && !hidden && (
+          <button onClick={handleHide}>Ready to answer</button>
+        )}
         {started && hidden && <button onClick={handleSubmit}>Submit</button>}
-        <h1 className='Time'>{(time / 100).toFixed(2)}</h1>
+        <h1 className="Time">{(time / 100).toFixed(2)}</h1>
         <h1>{feedback}</h1>
         <button onClick={deleteData}>Delete Data</button>
       </div>
