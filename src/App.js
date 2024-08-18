@@ -7,10 +7,11 @@ function App() {
   const [questionLength, setQuestionLength] = useState(200);
   const [feedback, setFeedback] = useState("");
 
+ 
   const generateQuestion = () => {
     let newQuestion = "";
     for (let i = 0; i < questionLength; i++) {
-      if (i % 3 === 0) {
+      if (i % 3 === 0 && i > 0) {
         newQuestion += " ";
       }
       const digit = Math.floor(Math.random() * 10);
@@ -19,7 +20,7 @@ function App() {
     setQuestion(newQuestion);
   };
 
-  // Timer
+ 
   const [started, setStarted] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0);
@@ -27,7 +28,7 @@ function App() {
   useEffect(() => {
     if (isRunning) {
       const intervalId = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
+        setTime((prevTime) => prevTime + 10);
       }, 10);
       return () => clearInterval(intervalId);
     }
@@ -43,11 +44,13 @@ function App() {
 
   const [hidden, setHidden] = useState(false);
 
+
   const handleHide = () => {
     setHidden(true);
   };
 
-  // Submitting
+  
+
   const [answer, setAnswer] = useState("");
   const handleSubmit = () => {
     setIsRunning(false);
@@ -56,11 +59,7 @@ function App() {
 
     const cleanedQuestion = question.replace(/\s+/g, "");
     const cleanedAnswer = answer.replace(/\s+/g, "");
-    if (cleanedQuestion === cleanedAnswer) {
-      setFeedback("true");
-    } else {
-      setFeedback("false");
-    }
+    setFeedback(cleanedQuestion === cleanedAnswer ? "true" : "false");
     saveData(cleanedQuestion, cleanedAnswer);
   };
 
@@ -81,9 +80,7 @@ function App() {
 
   const saveData = (cleanedQuestion, cleanedAnswer) => {
     const savedData = JSON.parse(localStorage.getItem("stats") || "[]");
-
     const result = cleanedQuestion === cleanedAnswer ? "true" : "false";
-
     const newAttempt = {
       time: (time / 100).toFixed(2),
       feedback: result,
@@ -98,7 +95,7 @@ function App() {
     window.location.reload();
   };
 
-  //Typing animation
+  // Typing animation
   const [typedInstance, setTypedInstance] = useState(null);
   const textareaRef = useRef(null);
   useEffect(() => {
@@ -124,15 +121,10 @@ function App() {
     }
   }, [started, hidden, question]);
 
-
-  // answer formating
+  // Answer formatting
   const formatInput = (value) => {
- 
     const cleaned = value.replace(/\D/g, '');
-    
-
     const formatted = cleaned.replace(/(.{3})(?=.)/g, '$1 ');
-
     return formatted;
   };
 
@@ -140,24 +132,38 @@ function App() {
     setAnswer(formatInput(e.target.value));
   };
 
- 
+  //  focus
+  const initialFocus = useRef(null);
+  useEffect(() => {
+    if (initialFocus.current) {
+      initialFocus.current.focus(); 
+    }
+  }, [!started, hidden]);
+  const pageFocus = useRef(null);
+  useEffect(() => {
+    if (hidden && pageFocus.current) {
+      setTimeout(() => {
+        pageFocus.current.focus(); 
+      }, 0);
+    }
+  }, [hidden]);
+
   return (
-    <div className="Container"
-       
-        tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              if (!started) {
-                handleStart();
-            }
-              else if (!hidden && started) {
-                handleHide();
-              }
-              else if (started && hidden) {
-                handleSubmit();
-              }
+    <div
+      className="Container"
+      tabIndex={0}
+      ref={initialFocus}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          if (!started) {
+            handleStart();
+          } else if (!hidden) {
+            handleHide();
+          } else if (hidden) {
+            handleSubmit();
           }
-          }}
+        }
+      }}
     >
       <div className="Settings">
         <div>
@@ -186,27 +192,28 @@ function App() {
             <textarea className="Question" ref={textareaRef} readOnly />
           </div>
         )}
-       
+
         {hidden && (
           <div>
             <h1>Answer :</h1>
             <textarea
               className="Question"
+              ref={pageFocus}
               value={answer}
-              onChange={handleChange} />
+              onChange={handleChange}
+            />
           </div>
         )}
-         {/* feedback*/}
+
         {!started && (
-          
           <div className="feedbackContainer">
-          
             <div className="feedback">
               <h1>Question</h1>
               <textarea
                 className="Question"
                 style={{ width: "100%" }}
                 value={question}
+                readOnly
               />
             </div>
 
@@ -216,6 +223,7 @@ function App() {
                 className="Question"
                 style={{ width: "100%" }}
                 value={answer}
+                readOnly
               />
             </div>
           </div>
