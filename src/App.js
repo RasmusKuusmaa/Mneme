@@ -171,7 +171,13 @@ function App() {
           <input
             type="number"
             value={questionLength}
-            onChange={(e) => setQuestionLength(e.target.value)}
+            onChange={(e) => {  if (e.target.value < 100000) {
+              setQuestionLength(e.target.value);
+            }
+            else{
+              setQuestionLength(99999);
+            }
+          }}
           />
         </div>
       </div>
