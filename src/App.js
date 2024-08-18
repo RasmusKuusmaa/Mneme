@@ -140,9 +140,25 @@ function App() {
     setAnswer(formatInput(e.target.value));
   };
 
-  
+ 
   return (
-    <div className="Container">
+    <div className="Container"
+       
+        tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              if (!started) {
+                handleStart();
+            }
+              else if (!hidden && started) {
+                handleHide();
+              }
+              else if (started && hidden) {
+                handleSubmit();
+              }
+          }
+          }}
+    >
       <div className="Settings">
         <div>
           <h1>Question Length</h1>
@@ -170,19 +186,21 @@ function App() {
             <textarea className="Question" ref={textareaRef} readOnly />
           </div>
         )}
-
+       
         {hidden && (
           <div>
             <h1>Answer :</h1>
             <textarea
               className="Question"
               value={answer}
-              onChange={handleChange}
-            />
+              onChange={handleChange} />
           </div>
         )}
+         {/* feedback*/}
         {!started && (
+          
           <div className="feedbackContainer">
+          
             <div className="feedback">
               <h1>Question</h1>
               <textarea
