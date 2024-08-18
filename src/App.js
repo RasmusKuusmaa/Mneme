@@ -1,22 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './App.css';
+import Typed from 'typed.js';
+
 
 function App() {
   const [question, setQuestion] = useState('');
-  const [questionLength, setQuestionLength] = useState(2);
+  const [questionLength, setQuestionLength] = useState(200);
   const [feedback, setFeedback] = useState('');
 
   const generateQuestion = () => {
-    let newQuestion = "";
+    let newQuestion = '';
     for (let i = 0; i < questionLength; i++) {
       if (i % 3 === 0) {
-        newQuestion += ' '
+        newQuestion += ' ';
       }
       const digit = Math.floor(Math.random() * 10);
       newQuestion += digit.toString();
     }
     setQuestion(newQuestion);
-  }
+  };
 
   // Timer
   const [started, setStarted] = useState(false);
@@ -38,13 +40,13 @@ function App() {
     generateQuestion();
     setTime(0);
     setAnswer('');
-  }
+  };
 
   const [hidden, setHidden] = useState(false);
 
   const handleHide = () => {
     setHidden(true);
-  }
+  };
 
   // Submitting
   const [answer, setAnswer] = useState('');
@@ -60,8 +62,7 @@ function App() {
       setFeedback('false');
     }
     saveData(cleanedQuestion); 
-  }
-  
+  };
 
   // Data Storage
   const [attempts, setAttempts] = useState([]);
@@ -90,18 +91,44 @@ function App() {
     savedData.push(newAttempt);
     localStorage.setItem('stats', JSON.stringify(savedData));
     setAttempts(savedData);
-  }
+  };
 
   const deleteData = () => {
     localStorage.setItem('stats', '[]');
     window.location.reload();
-  }
+  };
+
+  //Typing animation
+  const [typedInstance, setTypedInstance] = useState(null);
+  const textareaRef = useRef(null);
+  useEffect(() => {
+    if (textareaRef.current && started && !hidden) {
+      const options = {
+        strings: [question],
+        typeSpeed: 10, 
+        loop: false,
+        showCursor: false,
+        onComplete: () => {
+          if (typedInstance) {
+            typedInstance.destroy();
+          }
+        }
+      };
+
+      const instance = new Typed(textareaRef.current, options);
+      setTypedInstance(instance);
+
+      return () => {
+        instance.destroy();
+      };
+    }
+  }, [started, hidden, question]);
 
   return (
     <div className='Container'>
       <div className='Settings'> 
-      <div>
-          <h1> Question Length:</h1>
+        <div>
+          <h1>Question Length</h1>
           <input 
             type='number'
             value={questionLength}
@@ -120,44 +147,40 @@ function App() {
       </div>
       
       <div className='QuestionBox'>
-        
-        {!hidden && started && <div> 
-        <h1>Question :</h1>
-        <textarea className='Question'
-        value={question}
-        
-        />
-        </div>
-        }
-                  
-        {hidden &&
+        {!hidden && started && (
           <div> 
-          <h1>Answer : </h1>
-          <textarea className='Question'
-          
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
+            
+            <h1>Question: </h1>
+            <textarea className='Question'
+                        ref={textareaRef} 
+readOnly/>
+            
           </div>
-        }
-        {!started &&
+        )}
+                  
+        {hidden && (
+          <div> 
+            <h1>Answer :</h1>
+            <textarea
+              className='Question'
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+            />
+          </div>
+        )}
+        {!started && (
           <div className='feedbackContainer'>
             <div className='feedback'>
-              <h1>Question : </h1>
-              <textarea className='Question' style={{width: '100%'}}
-                value={question}
-               />
+              <h1>Question</h1>
+              <textarea className='Question' style={{width: '100%'}} value={question} />
             </div>
     
             <div className='feedback'>
-              <h1>Answer : </h1>
-              <textarea className='Question' style={{width: '100%'}}
-                value={answer}
-               />
-       
+              <h1>Answer: </h1>
+              <textarea className='Question' style={{width: '100%'}} value={answer} />
             </div>
           </div>
-        }
+        )}
       </div>
 
       <div className='Buttons'>

@@ -20,6 +20,9 @@ Text Color: #efd9ceff;
   left: 0;
   top: 0;
 }
+.Settings input {
+  position: fixed !important;
+}
 .Stats {
   border: 5px solid black;
   position: fixed;
@@ -93,3 +96,4 @@ li {
 
   width: 30vw;
 }
+
