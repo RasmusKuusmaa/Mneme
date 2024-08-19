@@ -74,6 +74,7 @@ function App() {
       }
       if (savedLength) {
         setDefaultQuestionLength(JSON.parse(savedLength));
+        setQuestionLength(JSON.parse(savedLength))
       }
     } catch {
       setAttempts([]);
@@ -107,10 +108,11 @@ function App() {
 
 
   // Typing animation
+  const [animationsOn, setAnimationsOn] = useState(true);
   const [typedInstance, setTypedInstance] = useState(null);
   const textareaRef = useRef(null);
   useEffect(() => {
-    if (textareaRef.current && started && !hidden) {
+    if (animationsOn && textareaRef.current && started && !hidden) {
       const options = {
         strings: [question],
         typeSpeed: 10,
@@ -130,7 +132,7 @@ function App() {
         instance.destroy();
       };
     }
-  }, [started, hidden, question]);
+  }, [animationsOn, started, hidden, question]);
 
   // Answer formatting
   const formatInput = (value) => {
@@ -223,7 +225,10 @@ function App() {
               />
             </h1>
           </div>
-          <div className="settingButton"></div>
+          <div className="settingButton" >
+            <h1>Animations: </h1>
+            <button className="AnimationToggle" onClick={() => setAnimationsOn(!animationsOn)} id={animationsOn ? "AnimationToggleon" : "AnimationToggleOff"}>On</button>
+          </div>
 
           <button className="deleteDataButton" onClick={deleteData}>
             Delete Data
@@ -235,7 +240,10 @@ function App() {
         {!hidden && started && (
           <div>
             <h1>Question: </h1>
-            <textarea className="Question" ref={textareaRef} readOnly />
+            { animationsOn && <textarea className="Question" ref={textareaRef} readOnly />}
+            { !animationsOn && <textarea className="Question" value={question} readOnly />}
+
+            
           </div>
         )}
 

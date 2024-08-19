@@ -39,7 +39,12 @@ Text Color: #efd9ceff;
 .settingButton {
   border:3px solid black;
   height: 10vh;
-  margin: 0.25rem
+  margin: 0.25rem;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 1vw;
 }
 .Settingchange{
   width: 6vh;
@@ -49,6 +54,16 @@ Text Color: #efd9ceff;
   font-size: 1rem;
   text-decoration: none;
   border-radius: 10%;
+}
+.AnimationToggle{
+  width: 5vw;
+  
+}
+#AnimationToggleon {
+  background-color: green;
+}
+#AnimationToggleOff{
+  background-color: red;
 }
 .deleteDataButton {
   width: 10vw;
