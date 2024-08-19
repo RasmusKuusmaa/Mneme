@@ -148,6 +148,9 @@ function App() {
     }
   }, [hidden]);
 
+  // Change between Stats and settings;
+  const [statsOn, setStatsOn] = useState(true);
+
   return (
     <div
       className="Container"
@@ -165,23 +168,36 @@ function App() {
         }
       }}
     >
-      <div className="Settings">
-        <div>
-          <h1>Question Length</h1>
-          <input
-            type="number"
-            value={questionLength}
-            onChange={(e) => {  if (e.target.value < 100000) {
-              setQuestionLength(e.target.value);
-            }
-            else{
-              setQuestionLength(99999);
+      <div className="Statset">
+        { /* 
+
+          !!!!Delete after implementation in a different place!!!!
+          
+         <div>
+         <h1>Question Length</h1>
+         <input
+         type="number"
+         value={questionLength}
+         onChange={(e) => {  if (e.target.value < 100000) {
+          setQuestionLength(e.target.value);
+        }
+        else{
+          setQuestionLength(99999);
             }
           }}
           />
-        </div>
+          </div>
+          */
+        }
+        <button onClick={() => setStatsOn(true)}>
+          Stats
+        </button>
+        <button onClick={() => setStatsOn(false)}>
+          Settings 
+        </button>
       </div>
-      <div className="Stats">
+      {statsOn &&
+        <div className="Stats">
         <ul>
           {attempts.map((attempt, index) => (
             <li key={index}>
@@ -189,7 +205,7 @@ function App() {
             </li>
           ))}
         </ul>
-      </div>
+      </div>}
 
       <div className="QuestionBox">
         {!hidden && started && (

@@ -11,7 +11,7 @@ Text Color: #efd9ceff;
   height: 100vh;
 }
 
-.Settings { 
+.Statset { 
   
   border: 5px solid black;
   position: fixed;
@@ -19,9 +19,13 @@ Text Color: #efd9ceff;
   height: 20vh;
   left: 0;
   top: 0;
+  display: flex;
+  grid-template-columns: repeat(2, 1fr);
 }
-.Settings input {
-  position: fixed !important;
+.StatsetButton{
+  background-color: black;
+  width: auto;
+  height: auto;
 }
 .Stats {
   border: 5px solid black;
