@@ -33,7 +33,33 @@ Text Color: #efd9ceff;
   width: 20vw;
   height: 80vh;
   left: 0;
+  flex-direction: column;
   top: 22vh;
+}
+.settingButton {
+  border:3px solid black;
+  height: 10vh;
+  margin: 0.25rem
+}
+.Settingchange{
+  width: 6vh;
+  height: 6vh ;
+  background-color: #8f3985ff;
+  text-decoration-color: #efd9ceff;
+  font-size: 1rem;
+  text-decoration: none;
+  border-radius: 10%;
+}
+.deleteDataButton {
+  width: 10vw;
+  height: 10vh;
+  position: fixed;
+  top: 88vh;
+  margin: 0.25rem;
+  color: black;
+  background-color: red;
+  border-radius: 15%;
+  cursor: pointer;
 }
 .QuestionBox {
   border: 5px solid black;

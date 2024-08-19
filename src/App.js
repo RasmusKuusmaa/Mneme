@@ -3,11 +3,11 @@ import "./App.css";
 import Typed from "typed.js";
 
 function App() {
+  const [defaultQuestionLength, setDefaultQuestionLength] = useState(100)
   const [question, setQuestion] = useState("");
-  const [questionLength, setQuestionLength] = useState(200);
+  const [questionLength, setQuestionLength] = useState(defaultQuestionLength);
   const [feedback, setFeedback] = useState("");
 
- 
   const generateQuestion = () => {
     let newQuestion = "";
     for (let i = 0; i < questionLength; i++) {
@@ -20,7 +20,6 @@ function App() {
     setQuestion(newQuestion);
   };
 
- 
   const [started, setStarted] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0);
@@ -44,12 +43,9 @@ function App() {
 
   const [hidden, setHidden] = useState(false);
 
-
   const handleHide = () => {
     setHidden(true);
   };
-
-  
 
   const [answer, setAnswer] = useState("");
   const handleSubmit = () => {
@@ -64,14 +60,20 @@ function App() {
   };
 
   // Data Storage
+  
+
   const [attempts, setAttempts] = useState([]);
   useEffect(() => {
     try {
       const savedData = localStorage.getItem("stats");
+      const savedLength = localStorage.getItem("Length");
       if (savedData) {
         setAttempts(JSON.parse(savedData));
       } else {
         setAttempts([]);
+      }
+      if (savedLength) {
+        setDefaultQuestionLength(JSON.parse(savedLength));
       }
     } catch {
       setAttempts([]);
@@ -94,6 +96,15 @@ function App() {
     localStorage.setItem("stats", "[]");
     window.location.reload();
   };
+  const handleDefaultLength = (e) => {
+    if (e.target.value < 100000) {
+      setDefaultQuestionLength(e.target.value);
+    } else {
+      setDefaultQuestionLength(99999);
+    }
+    localStorage.setItem("Length", JSON.stringify(e.target.value));
+  }
+
 
   // Typing animation
   const [typedInstance, setTypedInstance] = useState(null);
@@ -123,8 +134,8 @@ function App() {
 
   // Answer formatting
   const formatInput = (value) => {
-    const cleaned = value.replace(/\D/g, '');
-    const formatted = cleaned.replace(/(.{3})(?=.)/g, '$1 ');
+    const cleaned = value.replace(/\D/g, "");
+    const formatted = cleaned.replace(/(.{3})(?=.)/g, "$1 ");
     return formatted;
   };
 
@@ -136,20 +147,20 @@ function App() {
   const initialFocus = useRef(null);
   useEffect(() => {
     if (initialFocus.current) {
-      initialFocus.current.focus(); 
+      initialFocus.current.focus();
     }
   }, [!started, hidden]);
   const pageFocus = useRef(null);
   useEffect(() => {
     if (hidden && pageFocus.current) {
       setTimeout(() => {
-        pageFocus.current.focus(); 
+        pageFocus.current.focus();
       }, 0);
     }
   }, [hidden]);
 
   // Change between Stats and settings;
-  const [statsOn, setStatsOn] = useState(true);
+  const [statsOn, setStatsOn] = useState(false);
 
   return (
     <div
@@ -169,43 +180,56 @@ function App() {
       }}
     >
       <div className="Statset">
-        { /* 
-
-          !!!!Delete after implementation in a different place!!!!
-          
-         <div>
-         <h1>Question Length</h1>
-         <input
-         type="number"
-         value={questionLength}
-         onChange={(e) => {  if (e.target.value < 100000) {
-          setQuestionLength(e.target.value);
-        }
-        else{
-          setQuestionLength(99999);
-            }
-          }}
-          />
-          </div>
-          */
-        }
-        <button onClick={() => setStatsOn(true)}>
-          Stats
-        </button>
-        <button onClick={() => setStatsOn(false)}>
-          Settings 
-        </button>
+        <button onClick={() => setStatsOn(true)}>Stats</button>
+        <button onClick={() => setStatsOn(false)}>Settings</button>
       </div>
-      {statsOn &&
+
+      {statsOn && (
         <div className="Stats">
-        <ul>
-          {attempts.map((attempt, index) => (
-            <li key={index}>
-              {index + 1} : {attempt.time} : {attempt.feedback}
-            </li>
-          ))}
-        </ul>
-      </div>}
+          <ul>
+            {attempts.map((attempt, index) => (
+              <li key={index}>
+                {index + 1} : {attempt.time} : {attempt.feedback}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {!statsOn && (
+        <div className="Stats">
+          <div className="settingButton">
+            <h1>
+              Question Length:
+              <input className="Settingchange"
+                type="number"
+                value={questionLength}
+                onChange={(e) => {
+                  if (e.target.value < 100000) {
+                    setQuestionLength(e.target.value);
+                  } else {
+                    setQuestionLength(99999);
+                  }
+                }}
+              />
+            </h1>
+          </div>
+          <div className="settingButton">
+          <h1>
+              Default Length:
+              <input className="Settingchange"
+                type="number"
+                value={defaultQuestionLength}
+                onChange={(e) => handleDefaultLength(e)}
+              />
+            </h1>
+          </div>
+          <div className="settingButton"></div>
+
+          <button className="deleteDataButton" onClick={deleteData}>
+            Delete Data
+          </button>
+        </div>
+      )}
 
       <div className="QuestionBox">
         {!hidden && started && (
@@ -260,7 +284,6 @@ function App() {
         {started && hidden && <button onClick={handleSubmit}>Submit</button>}
         <h1 className="Time">{(time / 100).toFixed(2)}</h1>
         <h1>{feedback}</h1>
-        <button onClick={deleteData}>Delete Data</button>
       </div>
     </div>
   );
